@@ -1,0 +1,43 @@
+@import 'common';
+
+.header {
+    background: $oc-violet-5;
+    .contents {
+        height: 5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        .column {
+            flex: 0.33;
+            display: flex;
+            justify-content: center;
+            .logo {
+                font-size: 2rem;
+                color: white;
+                font-weight: 800;
+                cursor: pointer;
+                user-select: none;
+
+                @include media("<=medium") {
+                    font-size: 1.3rem;
+                }
+            }
+    
+            .menu {
+                margin-left: auto;
+                margin-right: 1rem;
+                font-size: 2.5rem;
+                color: white;
+                user-select: none;
+                cursor: pointer;
+
+                @include media("<=medium") {
+                    font-size: 2rem;
+                }
+            }
+        }
+        
+        
+    }
+}
