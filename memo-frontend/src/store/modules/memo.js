@@ -1,4 +1,4 @@
-import * as types from 'store/actions/ActionTypes';
+import * as types from 'store/modules/ActionTypes';
 import update from 'react-addons-update';
 
 const initialState = {

@@ -2,7 +2,7 @@
 .wrapper {
     width: 1024px;
     margin: 0 auto;
-    margin-top: 1rem;
+    // margin-top: 1rem;
 
     @include media("<=medium") {
         width: 100%;

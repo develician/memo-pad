@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import AuthForm from 'components/auth/AuthForm/AuthForm';
+// import * as MyActionModule from 'store/modules/MyActionModule';
 import AuthWrapper from 'components/auth/AuthWrapper/AuthWrapper';
 import { changeInput, initializeAuthInputs } from 'store/actions/auth';
+import RegisterForm from 'components/auth/RegisterForm/RegisterForm';
 
-class AuthContainer extends Component {
-
-
+class RegisterContainer extends Component {
     handleChangeInput = ({name, value}) => {
         const { changeInput } = this.props;
         changeInput({name, value});
@@ -27,13 +26,12 @@ class AuthContainer extends Component {
             this.initializeAuthInputs();
         }
     }
-
     render() {
         const { version, email, password, passwordCheck } = this.props;
         const { handleChangeInput } = this;
         return (
             <AuthWrapper>
-                <AuthForm 
+                <RegisterForm 
                     onChangeInput={handleChangeInput}
                     email={email}
                     password={password}
@@ -56,4 +54,4 @@ export default connect(
             return dispatch(initializeAuthInputs());
         }
     })
-)(AuthContainer);
+)(RegisterContainer);

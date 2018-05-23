@@ -6,6 +6,7 @@ import MemoWrapper from 'components/memo/MemoWrapper/MemoWrapper';
 // import from 'store/modules/MyActionModule';
 
 class HomeContainer extends Component {
+    
     render() {
         return (
             <MemoWrapper>
