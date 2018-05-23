@@ -5,6 +5,7 @@ import {
     Register as RegisterPage
 } from 'pages';
 import { Switch, Route } from 'react-router-dom';
+import Base from 'containers/Base';
 
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
                 <Route exact path="/auth/login" component={AuthPage} />
                 <Route exact path="/auth/register" component={RegisterPage} />
             </Switch>
+            <Base/>
         </div>
     );
 };

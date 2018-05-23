@@ -5,7 +5,15 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-const RegisterForm = ({onChangeInput, email, password, passwordCheck}) => {
+const RegisterForm = ({onChangeInput, 
+  email, 
+  password, 
+  passwordCheck, 
+  onRegister, 
+  onKeydown,
+  errorMessage,
+  status,
+  theme}) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     onChangeInput({name, value});
@@ -14,6 +22,9 @@ const RegisterForm = ({onChangeInput, email, password, passwordCheck}) => {
     <div className={cx('form')}>
       <div className={cx('description')}>
         회원가입
+      </div>
+      <div className={cx('error')}>
+      {errorMessage.toUpperCase()}
       </div>
       <div className={cx('label')}>
         이메일
@@ -24,7 +35,8 @@ const RegisterForm = ({onChangeInput, email, password, passwordCheck}) => {
           name="email" 
           className={cx('input')}
           value={email}
-          onChange={handleChange}/>
+          onChange={handleChange}
+          onKeyDown={onKeydown}/>
       </div>
       <div className={cx('label')}>
         비밀번호
@@ -35,7 +47,8 @@ const RegisterForm = ({onChangeInput, email, password, passwordCheck}) => {
           name="password" 
           className={cx('input')}
           value={password}
-          onChange={handleChange}/>
+          onChange={handleChange}
+          onKeyDown={onKeydown}/>
       </div>
       <div className={cx('label')}>
         비밀번호 확인
@@ -46,11 +59,16 @@ const RegisterForm = ({onChangeInput, email, password, passwordCheck}) => {
           name="passwordCheck" 
           className={cx('input')}
           value={passwordCheck}
-          onChange={handleChange}/>
+          onChange={handleChange}
+          onKeyDown={onKeydown}/>
       </div>
       <div className={cx('button-wrapper')}>
-        <div className={cx('button')}>
-          회원가입
+        <div className={cx('button', theme)} onClick={onRegister}>
+          {
+            status === 'WAITING' ? 
+            'PLEASE WAIT...' : 
+            '회원가입'
+          }
         </div>
       </div>
       <div className={cx('register')}>

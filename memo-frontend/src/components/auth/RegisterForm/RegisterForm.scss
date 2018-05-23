@@ -26,6 +26,12 @@
         font-weight: 600;
     }
 
+    .error {
+        text-align: center;
+        font-weight: 500;
+        color: $oc-red-5;
+    }
+
     .label  {
         font-size: 1.25rem;
         font-weight: 500;
@@ -61,6 +67,11 @@
 
             &:active {
                 background: $oc-blue-5;
+            }
+
+            &.disabled{ 
+                background: $oc-gray-3;
+                pointer-events: none;
             }
 
         }

@@ -5869,6 +5869,10 @@ react-router@^4.2.0:
     prop-types "^15.5.4"
     warning "^3.0.0"
 
+react-timeago@^4.1.9:
+  version "4.1.9"
+  resolved "https://registry.yarnpkg.com/react-timeago/-/react-timeago-4.1.9.tgz#a5dee4ac072299a9a5ca5a61f56177a80f83c1fb"
+
 react@^16.3.2:
   version "16.3.2"
   resolved "https://registry.yarnpkg.com/react/-/react-16.3.2.tgz#fdc8420398533a1e58872f59091b272ce2f91ea9"
@@ -5968,6 +5972,10 @@ reduce-function-call@^1.0.1:
 redux-thunk@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.2.0.tgz#e615a16e16b47a19a515766133d1e3e99b7852e5"
+
+redux-timeout@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/redux-timeout/-/redux-timeout-2.0.0.tgz#ceb95de761d999226d127c02b75de23ba68446d2"
 
 redux@^4.0.0:
   version "4.0.0"

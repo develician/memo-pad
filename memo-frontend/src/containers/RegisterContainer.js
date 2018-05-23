@@ -3,8 +3,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 // import * as MyActionModule from 'store/modules/MyActionModule';
 import AuthWrapper from 'components/auth/AuthWrapper/AuthWrapper';
-import { changeInput, initializeAuthInputs } from 'store/actions/auth';
+import { changeInput, 
+        initializeAuthInputs,
+        registerRequest } from 'store/actions/auth';
 import RegisterForm from 'components/auth/RegisterForm/RegisterForm';
+import { withRouter } from 'react-router-dom';
 
 class RegisterContainer extends Component {
     handleChangeInput = ({name, value}) => {
@@ -21,30 +24,53 @@ class RegisterContainer extends Component {
         this.initializeAuthInputs();
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if(prevProps.version !== this.props.version) {
-            this.initializeAuthInputs();
+    handleRegister = async () => {
+        const { registerRequest, email, password, passwordCheck, history } = this.props;
+        try {
+            await registerRequest({email, password, passwordCheck});
+            if(this.props.registerSuccess === true) {
+                history.push('/auth/login');
+            }
+        } catch(e) {
+            console.log(e);
         }
     }
+
+    handleKeydown = (e) => {
+        if(e.key === "Enter") {
+            this.handleRegister();
+        }
+        
+    }
+
     render() {
-        const { version, email, password, passwordCheck } = this.props;
-        const { handleChangeInput } = this;
+        const { email, password, passwordCheck, registerErrorMessage, registerRequestStatus } = this.props;
+        const { handleChangeInput, handleRegister, handleKeydown } = this;
+
         return (
             <AuthWrapper>
                 <RegisterForm 
                     onChangeInput={handleChangeInput}
                     email={email}
                     password={password}
-                    passwordCheck={passwordCheck} />
+                    passwordCheck={passwordCheck}
+                    onRegister={handleRegister}
+                    onKeydown={handleKeydown}
+                    errorMessage={registerErrorMessage}
+                    status={registerRequestStatus}
+                    theme={registerRequestStatus === 'WAITING' && 'disabled'} />
             </AuthWrapper>
         )
     }
 }
 export default connect(
     (state) => ({
-        email: state.auth.email,
-        password: state.auth.password,
-        passwordCheck: state.auth.passwordCheck
+        email: state.auth.get('email'),
+        password: state.auth.get('password'),
+        passwordCheck: state.auth.get('passwordCheck'),
+        registerSuccess: state.auth.getIn(['register', 'success']),
+        registerErrorMessage: state.auth.getIn(['register', 'error']),
+        registerRequestStatus: state.auth.getIn(['register', 'status'])
     }),
     (dispatch) => ({
         changeInput: ({name, value}) => {
@@ -52,6 +78,9 @@ export default connect(
         },
         initializeAuthInputs: () => {
             return dispatch(initializeAuthInputs());
+        },
+        registerRequest: ({email, password, passwordCheck}) => {
+            return dispatch(registerRequest({email, password, passwordCheck}));
         }
     })
-)(RegisterContainer);
+)(withRouter(RegisterContainer));

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
-const AuthForm = ({onChangeInput, email, password, passwordCheck}) => {
+const AuthForm = ({onChangeInput, email, password, theme, onLogin, onKeydown, error, status}) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     onChangeInput({name, value});
@@ -14,6 +14,9 @@ const AuthForm = ({onChangeInput, email, password, passwordCheck}) => {
       <div className={cx('form')}>
         <div className={cx('description')}>
           로그인
+        </div>
+        <div className={cx('error')}>
+          {error.toUpperCase()}
         </div>
         <div className={cx('label')}>
           이메일
@@ -24,7 +27,8 @@ const AuthForm = ({onChangeInput, email, password, passwordCheck}) => {
             name="email" 
             className={cx('input')}
             value={email}
-            onChange={handleChange}/>
+            onChange={handleChange}
+            onKeyDown={onKeydown}/>
         </div>
         <div className={cx('label')}>
           비밀번호
@@ -35,11 +39,16 @@ const AuthForm = ({onChangeInput, email, password, passwordCheck}) => {
             name="password" 
             className={cx('input')}
             value={password}
-            onChange={handleChange}/>
+            onChange={handleChange}
+            onKeyDown={onKeydown}/>
         </div>
         <div className={cx('button-wrapper')}>
-          <div className={cx('button')}>
-            로그인
+          <div className={cx('button', theme)} onClick={onLogin}>
+          {
+            status === 'WAITING' ? 
+            'PLEASE WAIT...' : 
+            '회원가입'
+          }
           </div>
         </div>
         <div className={cx('register')}>

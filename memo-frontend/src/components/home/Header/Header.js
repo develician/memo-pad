@@ -3,10 +3,11 @@ import styles from './Header.scss';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import Locker from 'react-icons/lib/md/vpn-key';
+import UnLocker from 'react-icons/lib/md/lock-open';
 
 const cx = classNames.bind(styles);
 
-const Header = () => (
+const Header = ({logged, onLogout}) => (
   <div className={cx('header')}>
     <div className={cx('contents')}>
       <div className={cx('column')}>
@@ -17,9 +18,16 @@ const Header = () => (
         </Link>
       </div>
       <div className={cx('column')}>
-        <Link to="/auth/login" className={cx('menu')}>
-          <Locker />
-        </Link>
+        {
+          logged ? 
+          <div className={cx('menu')}>
+            <UnLocker onClick={onLogout} />
+          </div>
+          :
+          <Link to="/auth/login" className={cx('menu')}>
+            <Locker />
+          </Link>
+        }
       </div>
     </div>
   </div>

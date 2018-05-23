@@ -4,9 +4,9 @@ import AuthContainer from 'containers/AuthContainer';
 
 const Auth = () => {
     return (
-        // <PageTemplate>
+        <PageTemplate>
             <AuthContainer/>
-        // </PageTemplate>
+        </PageTemplate>
     );
 };
 

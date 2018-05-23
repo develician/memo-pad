@@ -1,0 +1,94 @@
+
+@import 'common';
+
+.MemoItem {
+    width: 500px;
+
+    @include media("<=medium") {
+        width: 90%;
+    }
+    background: $oc-gray-1;
+    margin: 0 auto;
+    margin-top: 1rem;
+    @include material-shadow(4, 0.5);
+    .contents {
+        display: flex;
+        flex-direction: column;
+
+        .date {
+            text-align: right;
+            padding-top: 1rem;
+            padding-right: 1rem;
+        }
+
+        .content {
+            margin: 0 auto;
+            width: 450px;
+            background: $oc-gray-3;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+
+            @include media("<=medium") {
+                width: 80%;
+            }
+        }
+
+        .textarea {
+            margin-left: 1rem;
+            margin-right: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+            height: 6.8rem;
+            outline: none;
+            border: 1px solid $oc-gray-6;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
+            .button-wrapper {
+                padding-right: 1rem;
+                display: flex;
+                
+                .button {
+                    
+                    color: white;
+                    padding-top: 0.35rem;
+                    padding-bottom: 0.35rem;
+                    padding-left: 0.5rem;
+                    padding-right: 0.5rem;
+                    border-radius: 2px;
+                    user-select: none;
+                    cursor: pointer;
+
+                    &.remove {
+                        background: $oc-red-5;
+                        
+                        &:hover {
+                            background: $oc-red-4;
+                        }
+
+                        &:active {
+                            background: $oc-red-5;
+                        }
+                    }
+
+                    &.update {
+                        background: $oc-blue-5;
+
+                        &:hover {
+                            background: $oc-blue-4;
+                        }
+
+                        &:active {
+                            background: $oc-blue-5;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
