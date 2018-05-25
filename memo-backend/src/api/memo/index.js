@@ -5,5 +5,6 @@ const memos = new Router();
 
 memos.post('/', memoCtrl.checkLogged, memoCtrl.create);
 memos.get('/', memoCtrl.checkLogged, memoCtrl.list);
+memos.patch('/:id', memoCtrl.checkLogged, memoCtrl.checkAuth, memoCtrl.checkObjectId, memoCtrl.update);
 
 module.exports = memos;

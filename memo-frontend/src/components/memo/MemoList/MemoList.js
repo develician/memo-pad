@@ -5,7 +5,7 @@ import MemoItem from 'components/memo/MemoItem';
 
 const cx = classNames.bind(styles);
 
-const MemoList = ({list, onClickUpdate, isUpdate, willUpdateId, oldContent, onChangeContent}) => {
+const MemoList = ({list, onClickUpdate, isUpdate, willUpdateId, oldContent, onChangeContent, onClickNoUpdate, onUpdateMemo}) => {
   if(list.size === 0) return null;
 
   const makeUpdateMode = ({id, content}) => {
@@ -14,6 +14,14 @@ const MemoList = ({list, onClickUpdate, isUpdate, willUpdateId, oldContent, onCh
 
   const handleChange = ({content}) => {
     onChangeContent({content});
+  }
+
+  const makeNoUpdateMode = ({id}) => {
+    onClickNoUpdate({id});
+  }
+
+  const updateMemo = ({id}) => {
+    onUpdateMemo({id});
   }
 
   const memoList = list.map(
@@ -27,9 +35,11 @@ const MemoList = ({list, onClickUpdate, isUpdate, willUpdateId, oldContent, onCh
           updated={memo.updated}
           updatedAt={memo.updatedAt}
           onClickUpdate={makeUpdateMode}
+          onClickNoUpdate={makeNoUpdateMode}
           isUpdate={isUpdate && memo._id === willUpdateId}
           oldContent={oldContent}
-          onChange={handleChange}/>
+          onChange={handleChange}
+          onUpdate={updateMemo}/>
       )
     }
   );

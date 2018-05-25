@@ -8,10 +8,13 @@ import {
     contentChange,
     writeMemoRequest,
     getMemoRequest,
-    makeUpdateMode
+    makeUpdateMode,
+    makeNoUpdateMode,
+    updateMemoRequest
 } from 'store/actions/memo';
 import MemoList from 'components/memo/MemoList/MemoList';
 import storage from 'lib/storage';
+import { withRouter } from 'react-router-dom';
 
 
 const $ = window.$;
@@ -52,7 +55,9 @@ class HomeContainer extends Component {
 
 
     componentDidMount() {
+        const { history } = this.props;
         if(!storage.get('loggedInfo')) {
+            history.push("/auth/login");
             return;
         }
         const { getMemoRequest, isInitial, lastId } = this.props;
@@ -83,23 +88,44 @@ class HomeContainer extends Component {
         makeUpdateMode({id, content});
     }
 
+    handleClickNoUpdate = ({id}) => {
+        const { makeNoUpdateMode } = this.props;
+        makeNoUpdateMode({id});
+    }
+
+    handleUpdateMemo = async ({id}) => {
+        const { updateMemoRequest, content } = this.props;
+
+        try {
+            await updateMemoRequest({id, content});
+            if(this.props.memoUpdateStatus === 'SUCCESS'){
+                this.handleClickNoUpdate({id});
+            } 
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
     render() {
         const { content, memoList, isUpdate, willUpdateId } = this.props;
-        const { handleChangeContent, writeMemo, handleClickUpdate } = this;
+        const { handleChangeContent, writeMemo, handleClickUpdate, handleClickNoUpdate, handleUpdateMemo } = this;
         return (
             <MemoWrapper>
                 <MemoPad
                     content={content}
                     onChangeContent={handleChangeContent}
                     onWrite={writeMemo}
+                    isUpdate={isUpdate}
                      />
                 <MemoList
                     list={memoList}
                     isUpdate={isUpdate}
-                    onClickUpdate={handleClickUpdate} 
+                    onClickUpdate={handleClickUpdate}
+                    onClickNoUpdate={handleClickNoUpdate} 
                     willUpdateId={willUpdateId}
                     oldContent={content}
-                    onChangeContent={handleChangeContent}/>
+                    onChangeContent={handleChangeContent}
+                    onUpdateMemo={handleUpdateMemo}/>
             </MemoWrapper>
         )
     }
@@ -112,7 +138,8 @@ export default connect(
         lastId: state.memo.get('lastId'),
         logged: state.auth.getIn(['check', 'logged']),
         isUpdate: state.memo.get('isUpdate'),
-        willUpdateId: state.memo.get('willUpdateId')
+        willUpdateId: state.memo.get('willUpdateId'),
+        memoUpdateStatus: state.memo.getIn(['update', 'status'])
     }),
     (dispatch) => ({
         contentChange: ({ content }) => {
@@ -126,6 +153,12 @@ export default connect(
         },
         makeUpdateMode: ({id, content}) => {
             return dispatch(makeUpdateMode({id, content}));
+        },
+        makeNoUpdateMode: ({id}) => {
+            return dispatch(makeNoUpdateMode({id}));
+        },
+        updateMemoRequest: ({id, content}) => {
+            return dispatch(updateMemoRequest({id, content}));
         }
     })
-)(HomeContainer);
+)(withRouter(HomeContainer));

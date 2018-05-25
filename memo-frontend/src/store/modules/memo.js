@@ -7,7 +7,11 @@ import {
     GET_MEMO,
     GET_MEMO_SUCCESS,
     GET_MEMO_FAILURE,
-    MAKE_UPDATE_MODE
+    MAKE_UPDATE_MODE,
+    MAKE_NO_UPDATE_MODE,
+    UPDATE_MEMO,
+    UPDATE_MEMO_SUCCESS,
+    UPDATE_MEMO_FAILURE
  } from 'store/modules/ActionTypes';
 
 const initialState = Map(
@@ -23,7 +27,12 @@ const initialState = Map(
         isDone: false,
         newMemo: Map({}),
         isUpdate: false,
-        willUpdateId: ''
+        willUpdateId: '',
+        update: Map({
+            status: 'INIT',
+            success: false,
+            error: ''
+        })
     }
 );
 
@@ -73,6 +82,27 @@ export default function memo(state = initialState, action) {
             return state.set('isUpdate', true)
                         .set('willUpdateId', id)
                         .setIn(['memo', 'content'], content);
+        case MAKE_NO_UPDATE_MODE:
+            return state.set('isUpdate', false)
+                        .set('willUpdateId', '');
+        case UPDATE_MEMO:
+            return state.setIn(['update', 'status'], 'WAITING');
+        case UPDATE_MEMO_SUCCESS:
+            const { newMemo } = action;
+            const { _id } = newMemo;
+            const index = state.get('memoList').findIndex((memo, i) => {
+                return memo._id === _id;
+            });
+
+            state.get('memoList').splice(index, 1, newMemo)
+            return state.setIn(['update', 'status'], 'SUCCESS')
+                        .setIn(['update', 'success'], true)
+                        .setIn(['memo', 'content'], '');
+                        // .set('memoList', state.get('memoList').splice(index, 1, newMemo));
+        case UPDATE_MEMO_FAILURE:
+            return state.setIn(['update', 'status'], 'FAILURE')
+                        .setIn(['update', 'success'], false)
+                        .setIn(['update', 'error'], action.error);
         default: 
             return state;
     }

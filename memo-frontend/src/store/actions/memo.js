@@ -6,7 +6,11 @@ import {
     GET_MEMO,
     GET_MEMO_SUCCESS,
     GET_MEMO_FAILURE,
-    MAKE_UPDATE_MODE
+    MAKE_UPDATE_MODE,
+    MAKE_NO_UPDATE_MODE,
+    UPDATE_MEMO,
+    UPDATE_MEMO_SUCCESS,
+    UPDATE_MEMO_FAILURE
 } from 'store/modules/ActionTypes';
 import axios from 'axios';
 import storage from 'lib/storage';
@@ -99,4 +103,46 @@ export function makeUpdateMode({id, content}) {
         id,
         content
     };
+}
+
+export function makeNoUpdateMode({id}) {
+    return {
+        type: MAKE_NO_UPDATE_MODE,
+        id
+    }
+}
+
+export function updateMemo() {
+    return {
+        type: UPDATE_MEMO
+    };
+}
+
+export function updateMemoSuccess(newMemo) {
+    return {
+        type: UPDATE_MEMO_SUCCESS,
+        newMemo
+    };
+}
+
+export function updateMemoFailure(error) {
+    return {
+        type: UPDATE_MEMO_FAILURE,
+        error
+    };
+}
+
+export function updateMemoRequest({id, content}) {
+    return async (dispatch) => {
+        dispatch(updateMemo());
+
+        return axios.patch(`/api/memo/${id}`, {content})
+                    .then((response) => {
+                        const newMemo = response.data.newMemo;
+                        dispatch(updateMemoSuccess(newMemo));
+                    })
+                    .catch((error) => {
+                        dispatch(updateMemoFailure(error.response.data));
+                    })
+    }
 }

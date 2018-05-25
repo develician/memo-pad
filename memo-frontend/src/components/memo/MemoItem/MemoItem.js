@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styles from './MemoItem.scss';
 import classNames from 'classnames/bind';
 import TimeAgo from 'react-timeago';
@@ -6,7 +6,7 @@ import TimeAgo from 'react-timeago';
 
 const cx = classNames.bind(styles);
 
-const MemoItem = ({content, id, createdAt, updated, updatedAt, onClickUpdate, isUpdate, oldContent, onChange}) => {
+const MemoItem = ({content, id, createdAt, updated, updatedAt, onClickUpdate, isUpdate, oldContent, onChange, onClickNoUpdate, onUpdate}) => {
   
   const toggleEdit = (e) => {
     const { id } = e.target;
@@ -17,13 +17,24 @@ const MemoItem = ({content, id, createdAt, updated, updatedAt, onClickUpdate, is
     const { value } = e.target;
     onChange({content: value});
   }
+
+  const toggleNoUpdate = (e) => {
+    const { id } = e.target;
+    onClickNoUpdate({id});
+  }
+
+  const handleUpdate = () => {
+    onUpdate({id});
+  }
+
   return (
     <div className={cx('MemoItem')}>
       <div className={cx('contents')}>
         <div className={cx('date')}>
         {
           updated ? 
-          <TimeAgo date={updatedAt} live={true} /> : 
+          <Fragment>
+          <TimeAgo date={updatedAt} live={true} />(수정됨)</Fragment> : 
           <TimeAgo date={createdAt} live={true} />
         }
         </div>
@@ -40,6 +51,22 @@ const MemoItem = ({content, id, createdAt, updated, updatedAt, onClickUpdate, is
             onChange={handleChange}></textarea>
         }
         <div className={cx('buttons')}>
+        {
+          isUpdate ?
+          <Fragment>
+          <div className={cx('button-wrapper')}>
+            <div className={cx('button', 'update')} onClick={handleUpdate}>
+              수정
+            </div>
+          </div>
+          <div className={cx('button-wrapper')}>
+            <div className={cx('button', 'cancel')} id={id} onClick={toggleNoUpdate}>
+              취소
+            </div>
+          </div>
+          </Fragment>
+          :
+          <Fragment>
           <div className={cx('button-wrapper')}>
             <div className={cx('button', 'remove')}>
               삭제
@@ -50,6 +77,10 @@ const MemoItem = ({content, id, createdAt, updated, updatedAt, onClickUpdate, is
               수정
             </div>
           </div>
+          </Fragment>
+        }
+          
+          
         </div>
       </div>
     </div>

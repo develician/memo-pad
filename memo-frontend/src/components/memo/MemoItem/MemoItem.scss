@@ -87,6 +87,18 @@
                             background: $oc-blue-5;
                         }
                     }
+
+                    &.cancel {
+                        background: $oc-gray-5;
+
+                        &:hover {
+                            background: $oc-gray-4;
+                        }
+
+                        &:active {
+                            background: $oc-gray-5;
+                        }
+                    }
                 }
             }
         }

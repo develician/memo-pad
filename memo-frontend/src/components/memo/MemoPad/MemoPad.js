@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
-const MemoPad = ({content, onChangeContent, onWrite}) => {
+const MemoPad = ({content, onChangeContent, onWrite, isUpdate}) => {
   const handleChange = (e) => {
     const { value } = e.target;
     onChangeContent({content: value});
@@ -13,11 +13,19 @@ const MemoPad = ({content, onChangeContent, onWrite}) => {
     <div className={cx('memo-pad')}>
       <div className={cx('contents')}>
         <div className={cx('memo-wrapper')}>
-          <textarea 
+          {
+            isUpdate ? 
+            <textarea 
+            name="memo" 
+            className={cx('textarea')} 
+            ></textarea>
+            :
+            <textarea 
             name="memo" 
             className={cx('textarea')} 
             value={content}
             onChange={handleChange}></textarea>
+          }
         </div>
         <div className={cx('button-wrapper')}>
           <div className={cx('button')}>
