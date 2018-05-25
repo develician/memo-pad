@@ -178,9 +178,10 @@ exports.remove = async (ctx) => {
     let memo = null;
 
     try {
-         
+         memo = await Memo.findByIdAndRemove(id).exec();
     } catch(e) {
         ctx.throw(500, e);
     }
+    
 
 }
