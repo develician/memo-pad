@@ -10,7 +10,8 @@ import {
     getMemoRequest,
     makeUpdateMode,
     makeNoUpdateMode,
-    updateMemoRequest
+    updateMemoRequest,
+    removeMemoRequest
 } from 'store/actions/memo';
 import MemoList from 'components/memo/MemoList/MemoList';
 import storage from 'lib/storage';
@@ -106,9 +107,19 @@ class HomeContainer extends Component {
         }
     }
 
+    handleRemoveMemo = async ({id}) => {
+        const { removeMemoRequest } = this.props;
+
+        try {
+            await removeMemoRequest({id});
+        } catch(e) {
+            console.log(e);
+        }
+    }
+
     render() {
         const { content, memoList, isUpdate, willUpdateId } = this.props;
-        const { handleChangeContent, writeMemo, handleClickUpdate, handleClickNoUpdate, handleUpdateMemo } = this;
+        const { handleChangeContent, writeMemo, handleClickUpdate, handleClickNoUpdate, handleUpdateMemo, handleRemoveMemo } = this;
         return (
             <MemoWrapper>
                 <MemoPad
@@ -125,7 +136,8 @@ class HomeContainer extends Component {
                     willUpdateId={willUpdateId}
                     oldContent={content}
                     onChangeContent={handleChangeContent}
-                    onUpdateMemo={handleUpdateMemo}/>
+                    onUpdateMemo={handleUpdateMemo}
+                    onRemoveMemo={handleRemoveMemo}/>
             </MemoWrapper>
         )
     }
@@ -139,7 +151,8 @@ export default connect(
         logged: state.auth.getIn(['check', 'logged']),
         isUpdate: state.memo.get('isUpdate'),
         willUpdateId: state.memo.get('willUpdateId'),
-        memoUpdateStatus: state.memo.getIn(['update', 'status'])
+        memoUpdateStatus: state.memo.getIn(['update', 'status']),
+        memoRemoveStatus: state.memo.getIn(['remove', 'status'])
     }),
     (dispatch) => ({
         contentChange: ({ content }) => {
@@ -159,6 +172,9 @@ export default connect(
         },
         updateMemoRequest: ({id, content}) => {
             return dispatch(updateMemoRequest({id, content}));
+        },
+        removeMemoRequest: ({id}) => {
+            return dispatch(removeMemoRequest({id}));
         }
     })
 )(withRouter(HomeContainer));

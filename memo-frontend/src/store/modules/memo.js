@@ -11,7 +11,10 @@ import {
     MAKE_NO_UPDATE_MODE,
     UPDATE_MEMO,
     UPDATE_MEMO_SUCCESS,
-    UPDATE_MEMO_FAILURE
+    UPDATE_MEMO_FAILURE,
+    REMOVE_MEMO,
+    REMOVE_MEMO_SUCCESS,
+    REMOVE_MEMO_FAILURE
  } from 'store/modules/ActionTypes';
 
 const initialState = Map(
@@ -29,6 +32,11 @@ const initialState = Map(
         isUpdate: false,
         willUpdateId: '',
         update: Map({
+            status: 'INIT',
+            success: false,
+            error: ''
+        }),
+        remove: Map({
             status: 'INIT',
             success: false,
             error: ''
@@ -103,6 +111,24 @@ export default function memo(state = initialState, action) {
             return state.setIn(['update', 'status'], 'FAILURE')
                         .setIn(['update', 'success'], false)
                         .setIn(['update', 'error'], action.error);
+        case REMOVE_MEMO:
+            return state.setIn(['remove', 'status'], 'WAITING');
+        case REMOVE_MEMO_SUCCESS:
+            const newList = state.get('memoList').filter(
+                (memo, i) => {
+                    return memo._id !== action.id;
+                }
+            );
+            // console.log(newList);
+            // state.set('memoList', newList);
+            // console.log(state.get('memoList'));
+            return state.setIn(['remove', 'status'], 'SUCCESS')
+                        .setIn(['remove', 'success'], true)
+                        .set('memoList', newList);
+        case REMOVE_MEMO_FAILURE:
+            return state.setIn(['remove', 'status'], 'FAILURE')
+                        .setIn(['remove', 'success'], false)
+                        .setIn(['remove', 'error'], action.error);
         default: 
             return state;
     }

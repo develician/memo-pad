@@ -6,7 +6,7 @@ import TimeAgo from 'react-timeago';
 
 const cx = classNames.bind(styles);
 
-const MemoItem = ({content, id, createdAt, updated, updatedAt, onClickUpdate, isUpdate, oldContent, onChange, onClickNoUpdate, onUpdate}) => {
+const MemoItem = ({content, id, createdAt, updated, updatedAt, onClickUpdate, isUpdate, oldContent, onChange, onClickNoUpdate, onUpdate, onRemove}) => {
   
   const toggleEdit = (e) => {
     const { id } = e.target;
@@ -25,6 +25,10 @@ const MemoItem = ({content, id, createdAt, updated, updatedAt, onClickUpdate, is
 
   const handleUpdate = () => {
     onUpdate({id});
+  }
+
+  const handleRemove = () => {
+    onRemove({id});
   }
 
   return (
@@ -68,7 +72,7 @@ const MemoItem = ({content, id, createdAt, updated, updatedAt, onClickUpdate, is
           :
           <Fragment>
           <div className={cx('button-wrapper')}>
-            <div className={cx('button', 'remove')}>
+            <div className={cx('button', 'remove')} onClick={handleRemove}>
               삭제
             </div>
           </div>

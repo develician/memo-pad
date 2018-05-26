@@ -10,7 +10,10 @@ import {
     MAKE_NO_UPDATE_MODE,
     UPDATE_MEMO,
     UPDATE_MEMO_SUCCESS,
-    UPDATE_MEMO_FAILURE
+    UPDATE_MEMO_FAILURE,
+    REMOVE_MEMO,
+    REMOVE_MEMO_SUCCESS,
+    REMOVE_MEMO_FAILURE
 } from 'store/modules/ActionTypes';
 import axios from 'axios';
 import storage from 'lib/storage';
@@ -143,6 +146,40 @@ export function updateMemoRequest({id, content}) {
                     })
                     .catch((error) => {
                         dispatch(updateMemoFailure(error.response.data));
+                    })
+    }
+}
+
+export function removeMemo() {
+    return {
+        type: REMOVE_MEMO
+    };
+}
+
+export function removeMemoSuccess({id}) {
+    return {
+        type: REMOVE_MEMO_SUCCESS,
+        id
+    };
+}
+
+export function removeMemoFailure(error) {
+    return {
+        type: REMOVE_MEMO_FAILURE,
+        error
+    }
+}
+
+export function removeMemoRequest({id}) {
+    return async (dispatch) => {
+        dispatch(removeMemo());
+
+        return axios.delete(`/api/memo/${id}`)
+                    .then((response) => {
+                        dispatch(removeMemoSuccess({id}));
+                    })
+                    .catch((error) => {
+                        dispatch(removeMemoFailure(error.response.data));
                     })
     }
 }

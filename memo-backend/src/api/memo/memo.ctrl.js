@@ -32,13 +32,12 @@ exports.checkAuth = async (ctx, next) => {
     let memo = null;
 
     try {
-        memo = await Memo.findOne({_id: id}).exec();
-        
-    } catch(e) {
+        memo = await Memo.findOne({ _id: id }).exec();
+    } catch (e) {
         ctx.throw(500, e);
     }
 
-    if(!memo.email === user.email) {
+    if (!memo.email === user.email) {
         ctx.status = 401;
         ctx.body = {
             message: "UNAUTHORIZED"
@@ -84,12 +83,12 @@ exports.list = async (ctx) => {
 
 
     const { initial, lastId } = ctx.query;
-    
+
     let memos = null;
 
     try {
         if (initial === "true") {
-            memos = await Memo.find({email})
+            memos = await Memo.find({ email })
                 .sort({ _id: -1 })
                 .limit(6)
                 .lean()
@@ -97,7 +96,7 @@ exports.list = async (ctx) => {
 
             memos.map(
                 (memo, i) => {
-                    if(memo.email !== email) {
+                    if (memo.email !== email) {
                         ctx.status = 401;
                         ctx.body = {
                             message: "UNAUTHORIZED"
@@ -113,22 +112,22 @@ exports.list = async (ctx) => {
             return;
         }
 
-        if(lastId !== "") {
+        if (lastId !== "") {
             let objId = new mongoose.Types.ObjectId(lastId);
-            memos = await Memo.find({_id: {$lt: objId}, email})
-                            .sort({_id: -1})
-                            .limit(6)
-                            .lean()
-                            .exec();
+            memos = await Memo.find({ _id: { $lt: objId }, email })
+                .sort({ _id: -1 })
+                .limit(6)
+                .lean()
+                .exec();
             ctx.body = {
                 memoList: memos
             };
             return;
         }
 
-        
 
-        
+
+
 
     } catch (e) {
         ctx.throw(500, e);
@@ -139,7 +138,7 @@ exports.update = async (ctx) => {
     const { id } = ctx.params;
     const { content } = ctx.request.body;
 
-    if(!content || content === "" || content === null) {
+    if (!content || content === "" || content === null) {
         ctx.status = 409;
         ctx.body = {
             message: "AT LEAST 1 CHARACTER REQUIRED"
@@ -154,9 +153,9 @@ exports.update = async (ctx) => {
             content,
             updated: true,
             updatedAt: new Date()
-        }, {new: true}).exec();
+        }, { new: true }).exec();
 
-        if(!memo) {
+        if (!memo) {
             ctx.status = 404;
             ctx.body = {
                 message: "THERE IS NO SUCH MEMO"
@@ -167,21 +166,44 @@ exports.update = async (ctx) => {
         ctx.body = {
             newMemo: memo
         };
-    } catch(e) {
+    } catch (e) {
         ctx.throw(500, e);
     }
 }
 
 exports.remove = async (ctx) => {
+
+    const { user } = ctx.request;
+
+
     const { id } = ctx.params;
+    console.log(id);
 
     let memo = null;
 
     try {
-         memo = await Memo.findByIdAndRemove(id).exec();
-    } catch(e) {
+        memo = await Memo.findOne({_id: id}).exec();
+        if (memo.email !== user.email) {
+            ctx.status = 401;
+            ctx.body = {
+                message: "UNAUTHORIZED"
+            };
+            return;
+        }
+    } catch (e) {
         ctx.throw(500, e);
     }
-    
+
+    try {
+        memo = await Memo.findByIdAndRemove(id).exec();
+    } catch (e) {
+        ctx.throw(500, e);
+    }
+
+    ctx.body = {
+        message: "removed"
+    };
+    ctx.status = 204;
+
 
 }

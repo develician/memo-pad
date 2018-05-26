@@ -47,7 +47,7 @@ const AuthForm = ({onChangeInput, email, password, theme, onLogin, onKeydown, er
           {
             status === 'WAITING' ? 
             'PLEASE WAIT...' : 
-            '회원가입'
+            '로그인'
           }
           </div>
         </div>
